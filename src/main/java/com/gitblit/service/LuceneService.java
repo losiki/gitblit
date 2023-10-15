@@ -17,10 +17,7 @@ package com.gitblit.service;
 
 import static org.eclipse.jgit.treewalk.filter.TreeFilter.ANY_DIFF;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -648,7 +645,7 @@ public class LuceneService implements Runnable {
 
 					if (StringUtils.isEmpty(ext) || !excludedExtensions.contains(ext)) {
 						// read the blob content
-						String str = JGitUtils.getStringContent(repository, commit.getTree(),
+						Reader str = JGitUtils.getContentReader(repository, commit.getTree(),
 								path.path, encodings);
 						if (str != null) {
 							doc.add(new Field(FIELD_CONTENT, str, TextField.TYPE_STORED));

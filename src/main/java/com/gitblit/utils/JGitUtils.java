@@ -15,8 +15,9 @@
  */
 package com.gitblit.utils;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -47,12 +49,10 @@ import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.dircache.DirCache;
 import org.eclipse.jgit.dircache.DirCacheEntry;
-import org.eclipse.jgit.errors.AmbiguousObjectException;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.LargeObjectException;
 import org.eclipse.jgit.errors.MissingObjectException;
-import org.eclipse.jgit.errors.RevisionSyntaxException;
 import org.eclipse.jgit.errors.StopWalkException;
 import org.eclipse.jgit.internal.JGitText;
 import org.eclipse.jgit.lib.AnyObjectId;
@@ -768,10 +768,27 @@ public class JGitUtils {
 	 * @return content as a byte []
 	 */
 	public static byte[] getByteContent(Repository repository, RevTree tree, final String path, boolean throwError) {
+		return getContent(repository, tree, path, throwError, ldr->ldr.getCachedBytes());
+	}
+	
+	public static InputStream getContentStream(Repository repository, RevTree tree, final String path, boolean throwError) {
+		return getContent(repository, tree, path, throwError, JGitUtils::openStream);
+	}
+
+	private static InputStream openStream(ObjectLoader ldr) {
+		try {
+			return ldr.openStream();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private static <T> T getContent(Repository repository, RevTree tree, final String path, boolean throwError,
+		Function<ObjectLoader,T> f) {
 		RevWalk rw = new RevWalk(repository);
 		TreeWalk tw = new TreeWalk(repository);
 		tw.setFilter(PathFilterGroup.createFromStrings(Collections.singleton(path)));
-		byte[] content = null;
+		T content = null;
 		try {
 			if (tree == null) {
 				ObjectId object = getDefaultBranch(repository);
@@ -790,7 +807,7 @@ public class JGitUtils {
 				FileMode entmode = tw.getFileMode(0);
 				if (entmode != FileMode.GITLINK) {
 					ObjectLoader ldr = repository.open(entid, Constants.OBJ_BLOB);
-					content = ldr.getCachedBytes();
+					content = f.apply(ldr);
 				}
 			}
 		} catch (Throwable t) {
@@ -820,6 +837,18 @@ public class JGitUtils {
 			return null;
 		}
 		return StringUtils.decodeString(content, charsets);
+	}
+	
+	public static Reader getContentReader(Repository repository, RevTree tree, String blobPath, String... charsets) {
+		// XXX charset detection logic
+		Charset charset;
+		if (charsets == null || charsets.length==0) {
+			charset = StandardCharsets.UTF_8;//or Charset.defaultCharset();
+		} else {
+			charset = Charset.forName(charsets[0]);
+		}
+		InputStream stream = getContentStream(repository, tree, blobPath, true);
+		return stream == null ? null : new BufferedReader(new InputStreamReader(stream, charset));
 	}
 
 	/**
