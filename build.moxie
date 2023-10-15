@@ -22,7 +22,7 @@ url: 'http://gitblit.com'
 issuesUrl: 'https://github.com/gitblit/gitblit'
 socialNetworkUrl: 'https://plus.google.com/114464678392593421684'
 forumUrl: 'http://groups.google.com/group/gitblit'
-mavenUrl: 'http://gitblit.github.io/gitblit-maven'
+mavenUrl: 'http://gitblit-org.github.io/gitblit-maven'
 
 # Licenses section included for POM generation
 licenses:
@@ -98,7 +98,7 @@ registeredRepositories:
 - { id: mavencentral, url: 'https://repo1.maven.org/maven2' }
 - { id: eclipse, url: 'https://repo.eclipse.org/content/groups/releases' }
 - { id: eclipse-snapshots, url: 'https://repo.eclipse.org/content/groups/snapshots' }
-- { id: gitblit, url: 'http://gitblit.github.io/gitblit-maven' }
+- { id: gitblit, url: 'http://gitblit-org.github.io/gitblit-maven' }
 
 # Source all dependencies from the following repositories in the specified order
 repositories: central, eclipse-snapshots, eclipse, gitblit
