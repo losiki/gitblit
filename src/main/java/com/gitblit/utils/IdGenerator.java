@@ -14,7 +14,7 @@
 
 package com.gitblit.utils;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /** Simple class to produce 4 billion keys randomly distributed. */
@@ -33,7 +33,7 @@ public class IdGenerator {
   private final AtomicInteger gen;
 
   public IdGenerator() {
-    gen = new AtomicInteger(new Random().nextInt());
+    gen = new AtomicInteger(ThreadLocalRandom.current().nextInt());
   }
 
   /** Produce the next identifier. */
