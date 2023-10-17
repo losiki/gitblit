@@ -101,7 +101,7 @@ public class RpcTests extends GitblitUnitTest {
 		assertNull("Server allows anyone to admin!", list);
 
 		list = RpcUtils.getUsers(url, "admin", "admin".toCharArray());
-		assertTrue("User list is empty!", list.size() > 0);
+		assertFalse("User list is empty!", list.isEmpty());
 	}
 
 	@Test
@@ -128,7 +128,7 @@ public class RpcTests extends GitblitUnitTest {
 		assertNull("Server allows anyone to admin!", list);
 
 		list = RpcUtils.getTeams(url, "admin", "admin".toCharArray());
-		assertTrue("Team list is empty!", list.size() > 0);
+		assertFalse("Team list is empty!", list.isEmpty());
 		assertEquals("admins", list.get(0).name);
 	}
 
@@ -344,20 +344,20 @@ public class RpcTests extends GitblitUnitTest {
 	public void testFederationResultRegistrations() throws Exception {
 		List<FederationModel> registrations = RpcUtils.getFederationResultRegistrations(url,
 				account, password.toCharArray());
-		assertTrue("No federation result registrations were retrieved!", registrations.size() >= 0);
+		assertFalse("No federation result registrations were retrieved!", registrations.isEmpty());
 	}
 
 	@Test
 	public void testFederationProposals() throws Exception {
 		List<FederationProposal> proposals = RpcUtils.getFederationProposals(url, account,
 				password.toCharArray());
-		assertTrue("No federation proposals were retrieved!", proposals.size() >= 0);
+		assertFalse("No federation proposals were retrieved!", proposals.isEmpty());
 	}
 
 	@Test
 	public void testFederationSets() throws Exception {
 		List<FederationSet> sets = RpcUtils.getFederationSets(url, account, password.toCharArray());
-		assertTrue("No federation sets were retrieved!", sets.size() >= 0);
+		assertFalse("No federation sets were retrieved!", sets.isEmpty());
 	}
 
 	@Test
