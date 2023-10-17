@@ -60,7 +60,7 @@ public class AvatarGeneratorProvider implements Provider<AvatarGenerator> {
 			clazz = GravatarGenerator.class.getName();
 		}
 		try {
-			Class<? extends AvatarGenerator> generatorClass = (Class<? extends AvatarGenerator>) Class.forName(clazz);
+			Class<? extends AvatarGenerator> generatorClass = Class.forName(clazz).asSubclass(AvatarGenerator.class);
 			avatarGenerator = runtimeManager.getInjector().getInstance(generatorClass);
 		} catch (Exception e) {
 			logger.error("failed to create avatar generator", e);
