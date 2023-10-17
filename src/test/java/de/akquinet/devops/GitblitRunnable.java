@@ -72,7 +72,7 @@ public class GitblitRunnable implements Runnable {
 			GitBlitServer4UITests.main("--httpPort", "" + httpPort, "--httpsPort", ""
 					+ httpsPort, "--shutdownPort", "" + shutdownPort,
 					"--repositoriesFolder",
-					"\"" + GitBlitSuite.REPOSITORIES.getAbsolutePath() + "\"",
+					GitBlitSuite.REPOSITORIES.getAbsolutePath(),
 					"--userService", userPropertiesPath, "--settings",
 					gitblitPropertiesPath);
 			setStartFailed(false);
