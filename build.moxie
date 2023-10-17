@@ -10,7 +10,7 @@ name: Gitblit
 description: pure Java Git solution
 groupId: com.gitblit
 artifactId: gitblit
-version: 1.9.3
+version: 1.9.4-SNAPSHOT
 inceptionYear: 2011
 
 # Current stable release
@@ -72,9 +72,9 @@ resourceDirectories:
 # compile for Java 7 class format
 tasks: {
 	'mx:javac' : {
-        source: 1.7
-        target: 1.7
-        compiler: javac1.7
+        source: 1.8
+        target: 1.8
+        compiler: modern
         encoding: UTF-8
         # stop complaints about bootstrap classpath when compiling with Java 7
         compilerArgs: '-Xlint:-options'
@@ -105,7 +105,7 @@ repositories: central, eclipse-snapshots, eclipse, gitblit
 
 # Convenience properties for dependencies
 properties: {
-  jetty.version  : 9.2.30.v20200428
+  jetty.version  : 9.4.53.v20231009
   slf4j.version  : 1.7.29
   wicket.version : 1.4.22
   lucene.version : 5.5.2
@@ -142,7 +142,15 @@ dependencies:
 - compile 'org.slf4j:slf4j-log4j12:${slf4j.version}' :war :fedclient :manager
 - compile 'com.sun.mail:javax.mail:1.5.1' :war
 - compile 'javax.servlet:javax.servlet-api:3.1.0' :fedclient
-- compile 'org.eclipse.jetty.aggregate:jetty-all:${jetty.version}' @jar
+- compile 'org.eclipse.jetty:jetty-servlet:${jetty.version}' @jar
+- compile 'org.eclipse.jetty:jetty-security:${jetty.version}' @jar
+- compile 'org.eclipse.jetty:jetty-server:${jetty.version}' @jar
+- compile 'org.eclipse.jetty:jetty-continuation:${jetty.version}' @jar
+- compile 'org.eclipse.jetty:jetty-http:${jetty.version}' @jar
+- compile 'org.eclipse.jetty:jetty-io:${jetty.version}' @jar
+- compile 'org.eclipse.jetty:jetty-util:${jetty.version}' @jar
+- compile 'org.eclipse.jetty:jetty-webapp:${jetty.version}' @jar
+- compile 'org.eclipse.jetty:jetty-xml:${jetty.version}' @jar
 - compile 'org.apache.wicket:wicket:${wicket.version}' :war !org.mockito
 - compile 'org.apache.wicket:wicket-auth-roles:${wicket.version}' :war !org.mockito
 - compile 'org.apache.wicket:wicket-extensions:${wicket.version}' :war !org.mockito
