@@ -16,14 +16,9 @@
 package com.gitblit.utils;
 
 import java.io.ByteArrayOutputStream;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.nio.charset.CharacterCodingException;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
-import java.nio.charset.IllegalCharsetNameException;
-import java.nio.charset.UnsupportedCharsetException;
+import java.nio.charset.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -272,12 +267,8 @@ public class StringUtils {
 	 * @return sha1 of the string
 	 */
 	public static String getSHA1(String text) {
-		try {
-			byte[] bytes = text.getBytes("iso-8859-1");
-			return getSHA1(bytes);
-		} catch (UnsupportedEncodingException u) {
-			throw new RuntimeException(u);
-		}
+		byte[] bytes = text.getBytes(StandardCharsets.ISO_8859_1);
+		return getSHA1(bytes);
 	}
 
 	/**
@@ -304,11 +295,7 @@ public class StringUtils {
 	 * @return md5 of the string
 	 */
 	public static String getMD5(String string) {
-		try {
-			return getMD5(string.getBytes("iso-8859-1"));
-		} catch (UnsupportedEncodingException u) {
-			throw new RuntimeException(u);
-		}
+		return getMD5(string.getBytes(StandardCharsets.ISO_8859_1));
 	}
 
 	/**
